@@ -44,6 +44,11 @@ namespace Car
         private float _maxSpeedMs;
         private float _currentSpeedKmh;
 
+        private void Start()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         private void Update()
         {
             ResetCarRotation();
