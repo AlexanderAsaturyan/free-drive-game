@@ -1,4 +1,5 @@
 using Configs;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Car
@@ -44,8 +45,11 @@ namespace Car
         private float _maxSpeedMs;
         private float _currentSpeedKmh;
 
+        private Dictionary<int, (float speedLimit, float gearRatio)> gearData;
+
         private void Start()
         {
+            CreateGearData();
             Cursor.lockState = CursorLockMode.Locked;
         }
 
@@ -77,6 +81,20 @@ namespace Car
             UpdateAllWheels();
         }
 
+        private void CreateGearData()
+        {
+            gearData = new Dictionary<int, (float, float)>()
+          {
+             { 1, (carConfig.GearSpeedLimits[0], carConfig.GearRatios[4]) },
+             { 2, (carConfig.GearSpeedLimits[1], carConfig.GearRatios[3]) },
+             { 3, (carConfig.GearSpeedLimits[2], carConfig.GearRatios[2]) },
+             { 4, (carConfig.GearSpeedLimits[3], carConfig.GearRatios[1]) },
+             { 5, (carConfig.GearSpeedLimits[4], carConfig.GearRatios[0]) },
+             { 0, (car.velocity.magnitude, 0) },
+             { -1, (carConfig.GearSpeedLimits[0], carConfig.GearRatios[4] * -1) }
+          };
+        }
+
         private void ResetCarRotation()
         {
             if (Input.GetKey(KeyCode.R))
@@ -106,96 +124,25 @@ namespace Car
 
             _gasInput = Input.GetAxis("Vertical");
 
+            if (Input.GetKeyDown(KeyCode.N)) _gear = 0;
+            else if (Input.GetKeyDown(KeyCode.Alpha1)) _gear = 1;
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) _gear = 2;
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) _gear = 3;
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) _gear = 4;
+            else if (Input.GetKeyDown(KeyCode.Alpha5)) _gear = 5;
+            else if (Input.GetKeyDown(KeyCode.Alpha6)) _gear = -1;
 
-            switch (_gear)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && _gear < 5) _gear++;
+            else if (Input.GetKeyDown(KeyCode.LeftControl) && _gear > -1) _gear--;
+
+            if (_gear == 0)
             {
-                case 1:
-                    _maxSpeedMs = carConfig.GearSpeedLimits[0];
-                    _wheelTorque = carConfig.EngineTorque * carConfig.GearRatios[4] /
-                                   carConfig.TransmissionEfficiency;
-                    break;
-                case 2:
-                    _maxSpeedMs = carConfig.GearSpeedLimits[1];
-                    _wheelTorque = carConfig.EngineTorque * carConfig.GearRatios[3] /
-                                   carConfig.TransmissionEfficiency;
-                    break;
-                case 3:
-                    _maxSpeedMs = carConfig.GearSpeedLimits[2];
-                    _wheelTorque = carConfig.EngineTorque * carConfig.GearRatios[2] /
-                                   carConfig.TransmissionEfficiency;
-                    break;
-                case 4:
-                    _maxSpeedMs = carConfig.GearSpeedLimits[3];
-                    _wheelTorque = carConfig.EngineTorque * carConfig.GearRatios[1] /
-                                   carConfig.TransmissionEfficiency;
-                    break;
-                case 5:
-                    _maxSpeedMs = carConfig.GearSpeedLimits[4];
-                    _wheelTorque = carConfig.EngineTorque * carConfig.GearRatios[0] /
-                                   carConfig.TransmissionEfficiency;
-                    break;
-                case 0:
-                    _maxSpeedMs = car.velocity.magnitude;
-                    _wheelTorque = 0;
-                    break;
-                case < 0:
-                    _maxSpeedMs = carConfig.GearSpeedLimits[0];
-                    _wheelTorque = carConfig.EngineTorque * carConfig.GearRatios[4] /
-                        carConfig.TransmissionEfficiency * -1;
-                    break;
+                gearData[0] = (car.velocity.magnitude, 0);
             }
 
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                _gear = 0;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                _gear = 1;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                _gear = 2;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                _gear = 3;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                _gear = 4;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                _gear = 5;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha6))
-            {
-                _gear = -1;
-            }
-
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                if (_gear < 5)
-                {
-                    _gear++;
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                if (_gear > -1)
-                {
-                    _gear--;
-                }
-            }
-
+            _maxSpeedMs = gearData[_gear].speedLimit;
+            _wheelTorque = carConfig.EngineTorque * gearData[_gear].gearRatio / carConfig.TransmissionEfficiency;
+            
             _currentSpeedKmh = Mathf.Round(car.velocity.magnitude) * KmhCoeff;
             Debug.LogError($"Speed: {_currentSpeedKmh} km/h");
             Debug.LogError($"Gear: {_gear}");
@@ -226,7 +173,7 @@ namespace Car
             if (leftFrontCollider.GetGroundHit(out WheelHit hit))
             {
                 leftFrontTrail.emitting = false;
-                if (hit.sidewaysSlip > carConfig.FrontSideSlipLimit || hit.sidewaysSlip < - carConfig.FrontSideSlipLimit)
+                if (hit.sidewaysSlip > carConfig.FrontSideSlipLimit || hit.sidewaysSlip < -carConfig.FrontSideSlipLimit)
                 {
                     //driftSound.Play();
                     leftFrontTrail.emitting = true;
@@ -236,7 +183,7 @@ namespace Car
             if (rightFrontCollider.GetGroundHit(out hit))
             {
                 rightFrontTrail.emitting = false;
-                if (hit.sidewaysSlip > carConfig.FrontSideSlipLimit || hit.sidewaysSlip < - carConfig.FrontSideSlipLimit)
+                if (hit.sidewaysSlip > carConfig.FrontSideSlipLimit || hit.sidewaysSlip < -carConfig.FrontSideSlipLimit)
                 {
                     //driftSound.Play();
                     rightFrontTrail.emitting = true;
