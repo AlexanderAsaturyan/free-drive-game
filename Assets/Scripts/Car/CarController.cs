@@ -34,7 +34,6 @@ namespace Car
         private bool _isCarRunning;
 
         private float _currentBrakeForce;
-        private float _currentHandbrakeForce;
         private float _currentTurnAngle;
 
         private int _gear;
@@ -71,7 +70,6 @@ namespace Car
             }
 
             Brake();
-            Handbrake();
             Turn();
             ControlDrift();
         }
@@ -147,25 +145,21 @@ namespace Car
             Debug.LogError($"Speed: {_currentSpeedKmh} km/h");
             Debug.LogError($"Gear: {_gear}");
 
-            _currentTurnAngle = carConfig.MaxTurnAngle * Input.GetAxis("Horizontal");
-            _currentBrakeForce = 0;
+            _currentTurnAngle = carConfig.MaxTurnAngle * Input.GetAxis("Horizontal");         
 
+            _currentBrakeForce = 0;
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 _currentBrakeForce = carConfig.BrakingForce;
             }
-
-            _currentHandbrakeForce = 0;
-            if (Input.GetKey(KeyCode.Space))
-            {
-                _currentHandbrakeForce = carConfig.HandbrakingForce;
-            }
         }
 
-        private void Handbrake()
+        private void Brake()
         {
-            leftBackCollider.brakeTorque = _currentHandbrakeForce;
-            rightBackCollider.brakeTorque = _currentHandbrakeForce;
+            leftFrontCollider.brakeTorque =  _currentBrakeForce;
+            rightFrontCollider.brakeTorque = _currentBrakeForce;
+            leftBackCollider.brakeTorque = _currentBrakeForce;
+            rightBackCollider.brakeTorque = _currentBrakeForce;
         }
 
         private void ControlDrift()
@@ -223,14 +217,6 @@ namespace Car
             rightBackCollider.motorTorque = _wheelTorque * _gasInput;
             leftFrontCollider.motorTorque = _wheelTorque * _gasInput;
             rightFrontCollider.motorTorque = _wheelTorque * _gasInput;
-        }
-
-        private void Brake()
-        {
-            leftFrontCollider.brakeTorque = _currentBrakeForce;
-            rightFrontCollider.brakeTorque = _currentBrakeForce;
-            rightBackCollider.brakeTorque = _currentBrakeForce;
-            leftBackCollider.brakeTorque = _currentBrakeForce;
         }
 
         private void Turn()

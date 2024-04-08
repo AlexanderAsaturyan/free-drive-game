@@ -6,8 +6,7 @@ namespace Configs
     public class CarConfig : ScriptableObject
     {
         [SerializeField] private float transmissionEfficiency = 0.95f;
-        [SerializeField] private float brakingForce = 500f;
-        [SerializeField] private float handbrakingForce = 300f;
+        [SerializeField] private float brakingForce = 300000f;
         [SerializeField] private float maxTurnAngle = 35f;
         [SerializeField] private float engineTorque = 196f;
         [SerializeField] private float[] gearRatios = { 0.8f, 1.0f, 1.3f, 1.9f, 3.5f };
@@ -17,7 +16,6 @@ namespace Configs
         
         public float TransmissionEfficiency => transmissionEfficiency;
         public float BrakingForce => brakingForce;
-        public float HandbrakingForce => handbrakingForce;
         public float MaxTurnAngle => maxTurnAngle;
         public float EngineTorque => engineTorque;
 
