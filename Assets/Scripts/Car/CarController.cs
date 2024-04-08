@@ -28,6 +28,9 @@ namespace Car
         [SerializeField] private AudioSource engineOffSound;
         [SerializeField] private AudioSource driftSound;
 
+        [SerializeField] private Light leftTailLight;
+        [SerializeField] private Light midTailLight;
+        [SerializeField] private Light rightTailLight;
 
         private const float KmhCoeff = 3.6f;
 
@@ -152,10 +155,19 @@ namespace Car
             {
                 _currentBrakeForce = carConfig.BrakingForce;
             }
+            else
+            {
+                leftTailLight.enabled = false;
+                midTailLight.enabled = false;
+                rightTailLight.enabled = false;
+            }
         }
 
         private void Brake()
         {
+            leftTailLight.enabled = true;
+            midTailLight.enabled = true;
+            rightTailLight.enabled = true;
             leftFrontCollider.brakeTorque =  _currentBrakeForce;
             rightFrontCollider.brakeTorque = _currentBrakeForce;
             leftBackCollider.brakeTorque = _currentBrakeForce;

@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: CarConfig
   m_EditorClassIdentifier: 
   transmissionEfficiency: 0.95
-  brakingForce: 20000
-  handbrakingForce: 3000
+  brakingForce: 2000000
   maxTurnAngle: 35
   engineTorque: 196
   gearRatios:
