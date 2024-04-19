@@ -52,7 +52,7 @@ namespace Car
         private void Start()
         {
             CreateGearData();
-            Cursor.lockState = CursorLockMode.Locked;
+           // Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void Update()
