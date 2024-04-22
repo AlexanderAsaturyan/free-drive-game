@@ -35,6 +35,18 @@ namespace Car
         private const float KmhCoeff = 3.6f;
 
         private bool _isCarRunning;
+        public bool IsCarRunning
+        {
+            get { return _isCarRunning; }
+            set { _isCarRunning = value; }
+        }
+
+        public Rigidbody Car
+        {
+            get { return car; }
+            set { car = value; }
+        }
+
 
         private float _currentBrakeForce;
         private float _currentTurnAngle;
@@ -120,10 +132,10 @@ namespace Car
                         break;
                 }
 
-                Debug.LogError($"IsCarRunning: {_isCarRunning}");
+                Debug.LogError($"_isCarRunning: {_isCarRunning}");
             }
 
-            _gasInput = Input.GetAxis("Vertical");
+           // _gasInput = Input.GetAxis("Vertical");
 
             if (Input.GetKeyDown(KeyCode.N)) _gear = 0;
             else if (Input.GetKeyDown(KeyCode.Alpha1)) _gear = 1;
@@ -229,6 +241,11 @@ namespace Car
             rightBackCollider.motorTorque = _wheelTorque * _gasInput;
             leftFrontCollider.motorTorque = _wheelTorque * _gasInput;
             rightFrontCollider.motorTorque = _wheelTorque * _gasInput;
+        }
+
+        public void SetGasInput(float gas)
+        {
+            _gasInput = gas;
         }
 
         private void Turn()
