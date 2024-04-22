@@ -28,10 +28,6 @@ namespace Car
         [SerializeField] private AudioSource engineOffSound;
         [SerializeField] private AudioSource driftSound;
 
-        [SerializeField] private Light leftTailLight;
-        [SerializeField] private Light midTailLight;
-        [SerializeField] private Light rightTailLight;
-
         private const float KmhCoeff = 3.6f;
 
         private bool _isCarRunning;
@@ -49,6 +45,11 @@ namespace Car
 
 
         private float _currentBrakeForce;
+        public float CurrentBrakeForce 
+        { 
+            get { return _currentBrakeForce; }
+            set { _currentBrakeForce = value; }
+        }
         private float _currentTurnAngle;
 
         private int _gear;
@@ -60,6 +61,9 @@ namespace Car
         private float _currentSpeedKmh;
 
         private Dictionary<int, (float speedLimit, float gearRatio)> gearData;
+
+        private float targetTurnAngle = 0f;
+        private float turnLerpTime = 0.1f;
 
         private void Start()
         {
@@ -160,26 +164,19 @@ namespace Car
             Debug.LogError($"Speed: {_currentSpeedKmh} km/h");
             Debug.LogError($"Gear: {_gear}");
 
-            _currentTurnAngle = carConfig.MaxTurnAngle * Input.GetAxis("Horizontal");         
+            // _currentTurnAngle = carConfig.MaxTurnAngle * Input.GetAxis("Horizontal");
+            _currentTurnAngle = Mathf.Lerp(_currentTurnAngle, targetTurnAngle, turnLerpTime);
 
-            _currentBrakeForce = 0;
+
+
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 _currentBrakeForce = carConfig.BrakingForce;
-            }
-            else
-            {
-                leftTailLight.enabled = false;
-                midTailLight.enabled = false;
-                rightTailLight.enabled = false;
-            }
+            }            
         }
 
         private void Brake()
         {
-            leftTailLight.enabled = true;
-            midTailLight.enabled = true;
-            rightTailLight.enabled = true;
             leftFrontCollider.brakeTorque =  _currentBrakeForce;
             rightFrontCollider.brakeTorque = _currentBrakeForce;
             leftBackCollider.brakeTorque = _currentBrakeForce;
@@ -246,6 +243,11 @@ namespace Car
         public void SetGasInput(float gas)
         {
             _gasInput = gas;
+        }
+
+        public void SetTurnInput(float turn)
+        {            
+            targetTurnAngle = carConfig.MaxTurnAngle * turn;
         }
 
         private void Turn()

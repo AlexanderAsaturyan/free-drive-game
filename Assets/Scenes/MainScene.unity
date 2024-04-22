@@ -5201,6 +5201,7 @@ GameObject:
   - component: {fileID: 1141731827}
   - component: {fileID: 1141731826}
   - component: {fileID: 1141731825}
+  - component: {fileID: 1141731828}
   m_Layer: 5
   m_Name: RightArrow
   m_TagString: Untagged
@@ -5310,6 +5311,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141731823}
   m_CullTransparentMesh: 1
+--- !u!114 &1141731828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141731823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bc8ecb244dbec34d9947cd56dbd089c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carController: {fileID: 6159472049262481613}
+  rightTurnButton: {fileID: 1141731825}
 --- !u!1 &1141744568
 GameObject:
   m_ObjectHideFlags: 0
@@ -6675,6 +6690,7 @@ GameObject:
   - component: {fileID: 1415899399}
   - component: {fileID: 1415899398}
   - component: {fileID: 1415899397}
+  - component: {fileID: 1415899400}
   m_Layer: 5
   m_Name: BrakePedal
   m_TagString: Untagged
@@ -6784,6 +6800,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415899395}
   m_CullTransparentMesh: 1
+--- !u!114 &1415899400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415899395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6d95f03163a4394c9b90887e6d6e797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brakeButton: {fileID: 1415899397}
+  carConfig: {fileID: 11400000, guid: 750641d0429164c6b972b63d5593ebb7, type: 2}
+  carController: {fileID: 6159472049262481613}
+  leftTailLight: {fileID: 783711264}
+  midTailLight: {fileID: 1461037236}
+  rightTailLight: {fileID: 1585468828}
 --- !u!1 &1424158260
 GameObject:
   m_ObjectHideFlags: 0
@@ -10435,6 +10469,7 @@ GameObject:
   - component: {fileID: 2073651641}
   - component: {fileID: 2073651640}
   - component: {fileID: 2073651639}
+  - component: {fileID: 2073651642}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -10544,6 +10579,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073651637}
   m_CullTransparentMesh: 1
+--- !u!114 &2073651642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073651637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6ac436aec2a41148bf09d593064efca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carController: {fileID: 6159472049262481613}
+  leftButton: {fileID: 2073651639}
 --- !u!1 &2078915551
 GameObject:
   m_ObjectHideFlags: 0
@@ -11700,9 +11749,6 @@ MonoBehaviour:
   engineStartSound: {fileID: 6159472049262481614}
   engineOffSound: {fileID: 6159472049262481615}
   driftSound: {fileID: 6159472049262481616}
-  leftTailLight: {fileID: 783711264}
-  midTailLight: {fileID: 1461037236}
-  rightTailLight: {fileID: 1585468828}
 --- !u!82 &6159472049262481614
 AudioSource:
   m_ObjectHideFlags: 0

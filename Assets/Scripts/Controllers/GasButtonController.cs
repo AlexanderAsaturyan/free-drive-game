@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-    class GasButtonController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class GasButtonController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField] private CarController carController;
         [SerializeField] private Button gasButton;
