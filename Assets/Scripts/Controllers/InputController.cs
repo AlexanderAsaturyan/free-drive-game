@@ -9,6 +9,8 @@ namespace Assets.Scripts.Controller
         [SerializeField] private CarController carController;
         [SerializeField] private Button startStopButton;
         [SerializeField] private Button recoverButton;
+        [SerializeField] private Button upshiftButton;
+        [SerializeField] private Button downshiftButton;
 
         [SerializeField] private AudioSource engineStartSound;
         [SerializeField] private AudioSource engineOffSound;        
@@ -17,12 +19,16 @@ namespace Assets.Scripts.Controller
         {
             startStopButton.onClick.AddListener(StartStopEngine);
             recoverButton.onClick.AddListener(Recover);
+            upshiftButton.onClick.AddListener(Upshift);
+            downshiftButton.onClick.AddListener(Downshift);
         }
 
         private void OnDisable()
         {
             startStopButton.onClick.RemoveListener(StartStopEngine);
             recoverButton.onClick.RemoveListener(Recover);
+            upshiftButton.onClick.RemoveListener(Upshift);
+            downshiftButton.onClick.RemoveListener(Downshift);
         }
 
 
@@ -45,6 +51,16 @@ namespace Assets.Scripts.Controller
         private void Recover()
         {
             carController.Car.transform.eulerAngles = Vector3.zero;
+        }
+
+        private void Upshift()
+        {
+            carController.Gear++;
+        }
+
+        private void Downshift()
+        {
+            carController.Gear--;
         }
     }
 }

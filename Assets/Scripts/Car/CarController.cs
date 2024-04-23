@@ -53,6 +53,11 @@ namespace Car
         private float _currentTurnAngle;
 
         private int _gear;
+        public int Gear
+        {
+            get { return _gear; }
+            set { _gear = value; }
+        }
 
         private float _wheelTorque;
         private float _gasInput;
